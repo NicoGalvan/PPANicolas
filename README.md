@@ -1,6 +1,12 @@
 # Proyecto Laravel con Vite y Vue 3
+link demo: https://youtu.be/fLTSuehilDc
+
+![image](https://github.com/user-attachments/assets/2fe10680-14ac-4bd1-92ee-ac572c134773)
 
 Este proyecto es una aplicación web desarrollada con **Laravel**, **Vite**, **Vue 3** y **MySQL**. A continuación los pasos para poner en marcha el proyecto en tu entorno local.
+## base de datos 
+
+![image](https://github.com/user-attachments/assets/a975111a-a83a-413b-a973-eae7e1d41fe5)
 
 ## Requisitos previos
 
