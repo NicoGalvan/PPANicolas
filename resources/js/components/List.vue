@@ -1,11 +1,8 @@
 <template>
     <div class="list-container">
         <!-- Botón para ordenar por duración -->
-        <button
-        v-if="journeys.length > 0"
-            @click="toggleSortOrder" 
-            class="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
+        <button v-if="journeys.length > 0" @click="toggleSortOrder"
+            class="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
             Ordenar por duración: {{ sortOrder === 'asc' ? 'Ascendente' : 'Descendente' }}
         </button>
 
@@ -20,18 +17,24 @@
                 <div class="flex items-center gap-2 relative">
                     <div class="w-24 border-t border-dashed border-gray-400"></div>
 
-                    <span
-                        v-if="item.stops.length == 0"
-                        class="text-sm font-medium text-gray-600"
-                    >Directo</span>
-                    
-                    <span
-                        v-else
-                        class="text-sm font-medium text-gray-600 relative cursor-pointer"
-                        @mouseover="showTooltip(index)"
-                        @mouseleave="hideTooltip"
-                    >
+                    <span v-if="item.stops.length == 0" class="text-sm font-medium text-gray-600">Directo</span>
+
+                    <span v-else class="text-sm font-medium text-gray-600 relative cursor-pointer"
+                        @mouseover="showTooltip(index)" @mouseleave="hideTooltip">
                         {{ item.stops.length }} escalas
+                        <!-- Tooltip flotante -->
+                        <div v-if="isTooltipVisible && tooltipIndex === index"
+                            class="absolute top-full mt-2 w-48 bg-white border border-gray-300 shadow-lg p-3 rounded-lg text-sm text-gray-700 z-50">
+                            <p class="font-semibold">Detalles de escalas:</p>
+                            <ul class="list-disc pl-4">
+                                <li v-for="stop in item.stops" :key="stop.id">
+                                    {{ formatTime(stop.flight_schedules[0].departure_time) }} {{
+                                    codeAirport(stop.origin_airport_id) }} - {{
+                                        formatTime(stop.flight_schedules[0].arrival_time) }} {{
+                                        codeAirport(stop.destination_airport_id) }}
+                                </li>
+                            </ul>
+                        </div>
                     </span>
 
                     <div class="w-24 border-t border-dashed border-gray-400"></div>
@@ -43,7 +46,8 @@
                 </div>
 
                 <div class="text-center text-lg font-medium text-gray-600">
-                    Duración: {{ calculateDuration(item.flight_schedule.departure_time, item.flight_schedule.arrival_time) }}
+                    Duración: {{ calculateDuration(item.flight_schedule.departure_time,
+                        item.flight_schedule.arrival_time) }}
                 </div>
             </div>
         </div>
@@ -78,7 +82,7 @@ const sortedJourneys = computed(() => {
     return journeys.value.slice().sort((a, b) => {
         const durationA = dayjs(a.flight_schedule.arrival_time).diff(dayjs(a.flight_schedule.departure_time), 'minute');
         const durationB = dayjs(b.flight_schedule.arrival_time).diff(dayjs(b.flight_schedule.departure_time), 'minute');
-        
+
         return sortOrder.value === 'asc' ? durationA - durationB : durationB - durationA;
     });
 });
